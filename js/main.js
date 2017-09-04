@@ -71,16 +71,6 @@ $(document).ready(function() {
     var $activeSlide = $('.slider-section .swiper-slide-active');
 
     // Collect form data
-    console.log({
-      form: 'mosaic',
-      price: $activeSlide.find('.product-size.active').data('price'),
-      size: $activeSlide.find('.product-size.active').text(),
-      title: $activeSlide.find('.product-title').text(),
-      color:  $activeSlide.find('.product-brand').text(),
-      userPhone: $(this).find('INPUT[name="contactPhone"]').val(),
-      userName: $(this).find('INPUT[name="yourName"]').val()
-    })
-
     return {
       form: 'mosaic',
       price: $activeSlide.find('.product-size.active').data('price'),
