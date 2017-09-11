@@ -4,18 +4,40 @@ $(document).ready(function() {
     processForm: '/ajax/process-form.php'
   };
 
-  new Swiper('.slider-section .swiper-container', {
+  new Swiper('.slider-section .products-slider', {
     direction: 'horizontal',
     slidesPerView: 1,
     nextButton: '.swiper-button-next',
     prevButton: '.swiper-button-prev',
     paginationClickable: true,
-    // autoplay: 4000,
     loop: true,
     spaceBetween: 0,
     mousewheelControl: false,
     speed: 1000,
-    simulateTouch:false
+    simulateTouch:false,
+    onSlideChangeStart: function(swiper) {
+      setTimeout(function() {
+        // Desroy old swiper instance
+        window.thumbsSlider && window.thumbsSlider.destroy(true, false);
+
+        // Get active slide wrapper
+        var $activeSlide = $(swiper.wrapper).children('LI:eq(' + swiper.activeIndex + ')')
+          , activeSize = $activeSlide.find('.product-size.active').index() - 1;
+
+        // Initialize product slider
+        $(function() {
+          window.thumbsSlider = new Swiper($activeSlide.find('.product-photo'), {
+            direction: 'horizontal',
+            slidesPerView: 1,
+            spaceBetween: 0,
+            mousewheelControl: false,
+            speed: 1000,
+            effect: 'coverflow',
+            initialSlide: activeSize
+          });
+        });
+      }, 100);
+    }
   });
 
   new Swiper('.rewiews-slider .swiper-container', {
@@ -23,7 +45,6 @@ $(document).ready(function() {
     slidesPerView: 1,
     pagination: '.reviews-pagination',
     paginationClickable: true,
-    // autoplay: 4000,
     loop: true,
     spaceBetween: 0,
     mousewheelControl: false,
@@ -43,7 +64,10 @@ $(document).ready(function() {
   });
 
   $('.product-size').on('click', function() {
-    var price = $(this).data('price');
+    var price = $(this).data('price')
+      , image = $(this).data('image');
+
+    window.thumbsSlider.slideTo($(this).index() - 1, 1000, true);
 
     $(this)
       .addClass('active')
@@ -160,7 +184,7 @@ $(document).ready(function() {
         $popupWrapper.show(0, function() {
           $(this).removeClass('invisible')
         });
-      }  
+      }
     });
   });
 
